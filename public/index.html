@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighthouse Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic styles for loading screen */
+        #loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding-top: 20%;
+            font-size: 1.5em;
+        }
+        /* Style for the iframe */
+        #report-value {
+            width: 100%;
+            height: 80vh; /* Adjust as needed */
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Run Lighthouse Test</h1>
+    <form id="lighthouse-form">
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Run Test</button>
+    </form>
+    <div id="loading">Generating report, please wait...</div>
+    <iframe id="report-value"></iframe>
+    <script>
+        document.getElementById('lighthouse-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const url = document.getElementById('url').value;
+            const loading = document.getElementById('loading');
+            const reportIframe = document.getElementById('report-value');
+
+            // Show the loading screen
+            loading.style.display = 'block';
+            reportIframe.style.display = 'none'; // Hide iframe initially
+
+            fetch('/run-lighthouse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `url=${encodeURIComponent(url)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide the loading screen and display the report
+                loading.style.display = 'none';
+                reportIframe.style.display = 'block'; // Show iframe
+                reportIframe.setAttribute('src', data.reportUrl);
+            })
+            .catch(error => {
+                console.error('Error fetching the Lighthouse report:', error);
+                loading.style.display = 'none';
+                reportIframe.style.display = 'none';
+                reportIframe.contentDocument.body.innerHTML = 'An error occurred while generating the report.';
+            });
+        });
+    </script>
+</body>
+</html>

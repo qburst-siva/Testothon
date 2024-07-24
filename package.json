@@ -1,0 +1,22 @@
+{
+  "name": "lighthouse-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "chrome-launcher": "^1.1.2",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "lighthouse": "^12.1.0",
+    "path": "^0.12.7",
+    "url": "^0.11.3"
+  }
+}
